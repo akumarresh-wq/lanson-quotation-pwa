@@ -18,9 +18,9 @@ export default function AppShell() {
   const [showMenu, setShowMenu] = useState(false)
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="flex flex-col h-screen md:h-full bg-gray-50">
       {/* Top Bar */}
-      <header className="fixed top-0 left-0 right-0 z-40 bg-white border-b border-gray-100">
+      <header className="shrink-0 bg-white border-b border-gray-100 pt-[env(safe-area-inset-top)] md:pt-9">
         <div className="flex items-center justify-between h-14 px-4">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center">
@@ -79,13 +79,13 @@ export default function AppShell() {
         </div>
       </header>
 
-      {/* Main Content */}
-      <main className="pt-14 pb-20">
+      {/* Main Content — scrollable */}
+      <main className="flex-1 overflow-y-auto">
         <Outlet />
       </main>
 
       {/* Bottom Navigation */}
-      <nav className="fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-gray-100 pb-[env(safe-area-inset-bottom)]">
+      <nav className="shrink-0 bg-white border-t border-gray-100 pb-[env(safe-area-inset-bottom)] md:pb-4">
         <div className="flex items-center justify-around h-16">
           {NAV_ITEMS.map(({ to, icon: Icon, label }) => (
             <NavLink
