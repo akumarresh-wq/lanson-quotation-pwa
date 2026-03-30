@@ -29,7 +29,7 @@ export function usePushNotifications() {
 
       // Save subscription to profile
       await supabase
-        .from('1_dm_profiles')
+        .from('3_disc_profiles')
         .update({ push_subscription: subscription.toJSON() })
         .eq('id', user.id)
 

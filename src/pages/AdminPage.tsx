@@ -14,8 +14,8 @@ function useAdminProfiles() {
     queryKey: ['admin-profiles'],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('1_dm_profiles')
-        .select('*, branch:1_dm_branches(*)')
+        .from('3_disc_profiles')
+        .select('*, branch:3_disc_branches(*)')
         .order('full_name')
       if (error) throw error
       return data ?? []
@@ -28,7 +28,7 @@ function useAdminBranches() {
     queryKey: ['admin-branches'],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('1_dm_branches')
+        .from('3_disc_branches')
         .select('*')
         .eq('is_active', true)
         .order('name')
@@ -107,14 +107,14 @@ export default function AdminPage() {
 
   async function handleRoleChange(userId: string, newRole: UserRole) {
     setUpdatingId(userId)
-    await supabase.from('1_dm_profiles').update({ role: newRole }).eq('id', userId)
+    await supabase.from('3_disc_profiles').update({ role: newRole }).eq('id', userId)
     queryClient.invalidateQueries({ queryKey: ['admin-profiles'] })
     setUpdatingId(null)
   }
 
   async function handleBranchChange(userId: string, branchId: string | null) {
     setUpdatingId(userId)
-    await supabase.from('1_dm_profiles').update({ branch_id: branchId || null }).eq('id', userId)
+    await supabase.from('3_disc_profiles').update({ branch_id: branchId || null }).eq('id', userId)
     queryClient.invalidateQueries({ queryKey: ['admin-profiles'] })
     setUpdatingId(null)
   }

@@ -35,7 +35,7 @@ serve(async (req) => {
 
     // Check caller is admin
     const { data: callerProfile } = await callerClient
-      .from('1_dm_profiles')
+      .from('3_disc_profiles')
       .select('role')
       .eq('id', caller.id)
       .single()
@@ -92,7 +92,7 @@ serve(async (req) => {
 
     if (Object.keys(updates).length > 0) {
       await adminClient
-        .from('1_dm_profiles')
+        .from('3_disc_profiles')
         .update(updates)
         .eq('id', newUser.user.id)
     }

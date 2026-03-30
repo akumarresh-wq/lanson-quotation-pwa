@@ -19,7 +19,7 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
   const fetchNotifications = useCallback(async () => {
     if (!user) return
     const { data } = await supabase
-      .from('1_dm_notifications')
+      .from('3_disc_notifications')
       .select('*')
       .eq('user_id', user.id)
       .order('created_at', { ascending: false })
@@ -37,7 +37,7 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
       .on('postgres_changes', {
         event: 'INSERT',
         schema: 'public',
-        table: '1_dm_notifications',
+        table: '3_disc_notifications',
         filter: `user_id=eq.${user.id}`,
       }, (payload) => {
         setNotifications(prev => [payload.new as Notification, ...prev])
@@ -50,13 +50,13 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
   const unreadCount = notifications.filter(n => !n.is_read).length
 
   async function markAsRead(id: string) {
-    await supabase.from('1_dm_notifications').update({ is_read: true }).eq('id', id)
+    await supabase.from('3_disc_notifications').update({ is_read: true }).eq('id', id)
     setNotifications(prev => prev.map(n => n.id === id ? { ...n, is_read: true } : n))
   }
 
   async function markAllAsRead() {
     if (!user) return
-    await supabase.from('1_dm_notifications').update({ is_read: true }).eq('user_id', user.id).eq('is_read', false)
+    await supabase.from('3_disc_notifications').update({ is_read: true }).eq('user_id', user.id).eq('is_read', false)
     setNotifications(prev => prev.map(n => ({ ...n, is_read: true })))
   }
 

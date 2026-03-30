@@ -7,7 +7,7 @@ export function useActivePriceList() {
     queryKey: ['active-price-list'],
     queryFn: async () => {
       const { data } = await supabase
-        .from('1_dm_price_lists')
+        .from('3_disc_price_lists')
         .select('*')
         .eq('is_active', true)
         .order('effective_from', { ascending: false })
@@ -24,8 +24,8 @@ export function usePriceListItems(priceListId: string | undefined) {
     enabled: !!priceListId,
     queryFn: async () => {
       const { data } = await supabase
-        .from('1_dm_price_list_items')
-        .select('*, variant:1_dm_vehicle_variants(*, model:1_dm_vehicle_models(*))')
+        .from('3_disc_price_list_items')
+        .select('*, variant:3_disc_vehicle_variants(*, model:3_disc_vehicle_models(*))')
         .eq('price_list_id', priceListId!)
       // Sort client-side by model display_order then variant name
       const items = (data ?? []) as PriceListItem[]
@@ -45,7 +45,7 @@ export function useVehicleModels() {
     queryKey: ['vehicle-models'],
     queryFn: async () => {
       const { data } = await supabase
-        .from('1_dm_vehicle_models')
+        .from('3_disc_vehicle_models')
         .select('*')
         .eq('is_active', true)
         .order('display_order')

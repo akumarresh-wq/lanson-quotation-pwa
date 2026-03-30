@@ -11,7 +11,7 @@ export function useCustomers() {
     enabled: !!user,
     queryFn: async () => {
       const { data } = await supabase
-        .from('1_dm_customers')
+        .from('3_disc_customers')
         .select('*')
         .order('created_at', { ascending: false })
       return data ?? []
@@ -26,7 +26,7 @@ export function useCreateCustomer() {
   return useMutation({
     mutationFn: async (input: { name: string; phone: string; email?: string }) => {
       const { data, error } = await supabase
-        .from('1_dm_customers')
+        .from('3_disc_customers')
         .insert({
           ...input,
           created_by: profile!.id,

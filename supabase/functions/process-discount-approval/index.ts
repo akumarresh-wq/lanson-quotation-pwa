@@ -82,7 +82,7 @@ serve(async (req) => {
 
     // Fetch the updated request with requestor details
     const { data: updatedRequest, error: fetchError } = await serviceClient
-      .from('1_dm_discount_requests')
+      .from('3_disc_discount_requests')
       .select('*, requestor:profiles!requested_by(id, full_name, push_subscription)')
       .eq('id', request_id)
       .single()
@@ -101,7 +101,7 @@ serve(async (req) => {
       : `Your discount request has been rejected.${remarks ? ` Reason: ${remarks}` : ''}`
 
     const { error: notifError } = await serviceClient
-      .from('1_dm_notifications')
+      .from('3_disc_notifications')
       .insert({
         user_id: updatedRequest.requested_by,
         title: `Discount Request ${action === 'approved' ? 'Approved' : 'Rejected'}`,

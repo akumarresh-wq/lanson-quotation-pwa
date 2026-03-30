@@ -104,7 +104,7 @@ serve(async (req) => {
     const serviceClient = createClient(supabaseUrl, supabaseServiceRoleKey)
 
     const { data: profile, error: profileError } = await serviceClient
-      .from('1_dm_profiles')
+      .from('3_disc_profiles')
       .select('role')
       .eq('id', user.id)
       .single()
@@ -209,7 +209,7 @@ serve(async (req) => {
 
     // Fetch all existing models
     const { data: existingModels, error: modelsError } = await serviceClient
-      .from('1_dm_vehicle_models')
+      .from('3_disc_vehicle_models')
       .select('id, name')
 
     if (modelsError) {
@@ -227,7 +227,7 @@ serve(async (req) => {
 
     // Fetch all existing variants
     const { data: existingVariants, error: variantsError } = await serviceClient
-      .from('1_dm_vehicle_variants')
+      .from('3_disc_vehicle_variants')
       .select('id, model_id, name, fuel_type, transmission')
 
     if (variantsError) {
@@ -266,7 +266,7 @@ serve(async (req) => {
       if (!variant) {
         // Create the variant
         const { data: newVariant, error: createError } = await serviceClient
-          .from('1_dm_vehicle_variants')
+          .from('3_disc_vehicle_variants')
           .insert({
             model_id: model.id,
             name: row.variant,
@@ -306,7 +306,7 @@ serve(async (req) => {
 
     // Deactivate all previous price lists
     const { error: deactivateError } = await serviceClient
-      .from('1_dm_price_lists')
+      .from('3_disc_price_lists')
       .update({ is_active: false })
       .eq('is_active', true)
 
@@ -320,7 +320,7 @@ serve(async (req) => {
 
     // Create the new price list
     const { data: priceList, error: priceListError } = await serviceClient
-      .from('1_dm_price_lists')
+      .from('3_disc_price_lists')
       .insert({
         title,
         effective_from: effectiveFrom,
@@ -351,12 +351,12 @@ serve(async (req) => {
     }))
 
     const { error: itemsError } = await serviceClient
-      .from('1_dm_price_list_items')
+      .from('3_disc_price_list_items')
       .insert(priceListItems)
 
     if (itemsError) {
       // Clean up: delete the price list if items failed to insert
-      await serviceClient.from('1_dm_price_lists').delete().eq('id', priceList.id)
+      await serviceClient.from('3_disc_price_lists').delete().eq('id', priceList.id)
       return new Response(
         JSON.stringify({ error: 'Failed to insert price list items: ' + itemsError.message }),
         { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }

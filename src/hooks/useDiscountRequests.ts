@@ -12,8 +12,8 @@ export function useDiscountRequests() {
     enabled: !!profile,
     queryFn: async () => {
       let query = supabase
-        .from('1_dm_discount_requests')
-        .select('*, variant:1_dm_vehicle_variants(*, model:1_dm_vehicle_models(*)), customer:1_dm_customers(*), requestor:1_dm_profiles!requested_by(*), approver:1_dm_profiles!assigned_to(*)')
+        .from('3_disc_discount_requests')
+        .select('*, variant:3_disc_vehicle_variants(*, model:3_disc_vehicle_models(*)), customer:3_disc_customers(*), requestor:3_disc_profiles!requested_by(*), approver:3_disc_profiles!assigned_to(*)')
         .order('created_at', { ascending: false })
         .limit(100)
 
@@ -43,8 +43,8 @@ export function useDiscountRequest(id: string | undefined) {
     enabled: !!id,
     queryFn: async () => {
       const { data } = await supabase
-        .from('1_dm_discount_requests')
-        .select('*, variant:1_dm_vehicle_variants(*, model:1_dm_vehicle_models(*)), customer:1_dm_customers(*), requestor:1_dm_profiles!requested_by(*, branch:1_dm_branches(*)), approver:1_dm_profiles!assigned_to(*)')
+        .from('3_disc_discount_requests')
+        .select('*, variant:3_disc_vehicle_variants(*, model:3_disc_vehicle_models(*)), customer:3_disc_customers(*), requestor:3_disc_profiles!requested_by(*, branch:3_disc_branches(*)), approver:3_disc_profiles!assigned_to(*)')
         .eq('id', id!)
         .single()
       return data as DiscountRequest | null
@@ -58,8 +58,8 @@ export function useApprovalLog(requestId: string | undefined) {
     enabled: !!requestId,
     queryFn: async () => {
       const { data } = await supabase
-        .from('1_dm_approval_log')
-        .select('*, actor:1_dm_profiles(*)')
+        .from('3_disc_approval_log')
+        .select('*, actor:3_disc_profiles(*)')
         .eq('request_id', requestId!)
         .order('created_at', { ascending: true })
       return (data ?? []) as ApprovalLogEntry[]
@@ -80,9 +80,9 @@ export function useCreateDiscountRequest() {
       requested_by: string
     }) => {
       const { data, error } = await supabase
-        .from('1_dm_discount_requests')
+        .from('3_disc_discount_requests')
         .insert(input)
-        .select('*, variant:1_dm_vehicle_variants(*, model:1_dm_vehicle_models(*)), customer:1_dm_customers(*)')
+        .select('*, variant:3_disc_vehicle_variants(*, model:3_disc_vehicle_models(*)), customer:3_disc_customers(*)')
         .single()
       if (error) throw error
       return data as DiscountRequest
